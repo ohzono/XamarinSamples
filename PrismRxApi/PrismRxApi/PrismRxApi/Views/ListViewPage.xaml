@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PrismRxApi.Views.ListPageView"
+             xmlns:behaviorsPack="clr-namespace:Xamarin.Forms.BehaviorsPack;assembly=Xamarin.Forms.BehaviorsPack"
+             Title="{Binding Title}">
+
+    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <Entry Text="{Binding Input.Value, Mode=TwoWay}"/>
+        <Label Text="{Binding Result.Value}" />
+        <Button Text="button" Command="{Binding Get}"/>
+        <ListView ItemsSource="{Binding ListItems}" SelectedItem="{Binding SelectedItem.Value}"
+                  IsPullToRefreshEnabled="True" IsRefreshing="{Binding IsRefreshing.Value}" RefreshCommand="{Binding Get}">
+            <ListView.Behaviors>
+                <behaviorsPack:SelectedItemBehavior Command="{Binding Selected}"/>
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Label Text="{Binding Id}"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+
+</ContentPage>
