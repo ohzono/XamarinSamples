@@ -1,7 +1,10 @@
 ﻿using ModernHttpClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PrismRxApi.Model.Api
@@ -10,15 +13,19 @@ namespace PrismRxApi.Model.Api
     {
         public async Task PutDataAsync(Employee employee)
         {
+            var jsonSetting = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
             var parameters = new Dictionary<string, string>
             {
-                {"employee_name", employee.Name}
-                ,{"employee_salary", employee.Salary }
-                ,{"employee_age", employee.Age}
+                {"name", employee.Name}
+                ,{"salary", employee.Salary }
+                ,{"age", employee.Age}
             };
-            var content = new FormUrlEncodedContent(parameters);
+            var json = JsonConvert.SerializeObject(parameters, jsonSetting);
+            var content = new StringContent(json, Encoding.UTF8, @"application/json");
             var url = Constants.API_END_POINT + "update/" + employee.Id;
-            // todo: 更新に成功しない
             using (var client = new HttpClient(new NativeMessageHandler()))
             {
                 var response = await client.PutAsync(url, content);
